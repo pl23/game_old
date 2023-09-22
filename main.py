@@ -2,7 +2,7 @@ import pygame
 import getpass as gp
 import socket
 from pprint import pprint
-
+import random
 import numpy
 
 SystemUser = gp.getuser()
@@ -22,218 +22,53 @@ board = [
     [0 for _ in range(GRID_WIDTH)]
     for _ in range(GRID_HEIGHT)
 ]
+class Piece:
+    def __init__(self):
+        pass
 
-I_piece = [
-    [
-        [0, 1, 0, 0],
-        [0, 1, 0, 0],
-        [0, 1, 0, 0],
-        [0, 1, 0, 0]
-    ],
-    [
-        [0, 0, 0, 0],
-        [1, 1, 1, 1],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0]
-    ],
-    [
-        [0, 0, 1, 0],
-        [0, 0, 1, 0],
-        [0, 0, 1, 0],
-        [0, 0, 1, 0]
-    ],
-    [
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [1, 1, 1, 1],
-        [0, 0, 0, 0]
-    ],
-]
-J_piece = [
-    [
-        [0, 1, 0, 0],
-        [0, 1, 0, 0],
-        [0, 1, 0, 0],
-        [0, 1, 0, 0]
-    ],
-    [
-        [0, 0, 0, 0],
-        [1, 1, 1, 1],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0]
-    ],
-    [
-        [0, 0, 1, 0],
-        [0, 0, 1, 0],
-        [0, 0, 1, 0],
-        [0, 0, 1, 0]
-    ],
-    [
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [1, 1, 1, 1],
-        [0, 0, 0, 0]
-    ],
-]
-L_piece = [
-    [
-        [0, 1, 0, 0],
-        [0, 1, 0, 0],
-        [0, 1, 0, 0],
-        [0, 1, 0, 0]
-    ],
-    [
-        [0, 0, 0, 0],
-        [1, 1, 1, 1],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0]
-    ],
-    [
-        [0, 0, 1, 0],
-        [0, 0, 1, 0],
-        [0, 0, 1, 0],
-        [0, 0, 1, 0]
-    ],
-    [
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [1, 1, 1, 1],
-        [0, 0, 0, 0]
-    ],
-]
-O_piece = [
-    [
-        [0, 1, 0, 0],
-        [0, 1, 0, 0],
-        [0, 1, 0, 0],
-        [0, 1, 0, 0]
-    ],
-    [
-        [0, 0, 0, 0],
-        [1, 1, 1, 1],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0]
-    ],
-    [
-        [0, 0, 1, 0],
-        [0, 0, 1, 0],
-        [0, 0, 1, 0],
-        [0, 0, 1, 0]
-    ],
-    [
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [1, 1, 1, 1],
-        [0, 0, 0, 0]
-    ],
-]
-S_piece = [
-    [
-        [0, 1, 0, 0],
-        [0, 1, 0, 0],
-        [0, 1, 0, 0],
-        [0, 1, 0, 0]
-    ],
-    [
-        [0, 0, 0, 0],
-        [1, 1, 1, 1],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0]
-    ],
-    [
-        [0, 0, 1, 0],
-        [0, 0, 1, 0],
-        [0, 0, 1, 0],
-        [0, 0, 1, 0]
-    ],
-    [
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [1, 1, 1, 1],
-        [0, 0, 0, 0]
-    ],
-]
-T_piece = [
-    [
-        [0, 1, 0, 0],
-        [0, 1, 0, 0],
-        [0, 1, 0, 0],
-        [0, 1, 0, 0]
-    ],
-    [
-        [0, 0, 0, 0],
-        [1, 1, 1, 1],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0]
-    ],
-    [
-        [0, 0, 1, 0],
-        [0, 0, 1, 0],
-        [0, 0, 1, 0],
-        [0, 0, 1, 0]
-    ],
-    [
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [1, 1, 1, 1],
-        [0, 0, 0, 0]
-    ],
-]
-Z_piece = [
-    [
-        [0, 1, 0, 0],
-        [0, 1, 0, 0],
-        [0, 1, 0, 0],
-        [0, 1, 0, 0]
-    ],
-    [
-        [0, 0, 0, 0],
-        [1, 1, 1, 1],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0]
-    ],
-    [
-        [0, 0, 1, 0],
-        [0, 0, 1, 0],
-        [0, 0, 1, 0],
-        [0, 0, 1, 0]
-    ],
-    [
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [1, 1, 1, 1],
-        [0, 0, 0, 0]
-    ],
-]
-piece_list = [I_piece, J_piece, L_piece, O_piece, S_piece, T_piece, Z_piece]
+    i_piece =
+    j_piece =
+    l_piece =
+    o_piece =
+    s_piece =
+    t_piece =
+    z_piece =
+    piece_list = [i_piece, j_piece, l_piece, o_piece, s_piece, t_piece, z_piece]
 
 
-def add_to_bord(x,y):
-    count_x = 0
-    count_y = 0
-    piece_tipe = piece_list[0]
-    Piece_Rotate = piece_tipe[0]
-
-
-    while count_x != 4:
-        board_row = board[count_x]
-        Piece_Row = Piece_Rotate[count_x]
-
-        while count_y != 4:
-            board_cell = board_row[count_y]
-            Piece_cell = Piece_Row[count_y]
-
-            if Piece_cell == 1:
-                board[x][y] += 1
-            count_y += 1
-        count_x +=1
-        count_y = 0
-
-
-
-
-    pprint(board)
-
+# def add_to_bord(start_x,start_y):
+#     x = start_x
+#     y = start_y
+#
+#
+#
+#     count_x = 0
+#     count_y = 0
+#     piece_tipe = piece_list[0]
+#     Piece_Rotate = piece_tipe[0]
+#
+#
+#     while count_x != 4:
+#         board_row = board[count_x]
+#         Piece_Row = Piece_Rotate[count_x]
+#
+#         while count_y != 4:
+#             board_cell = board_row[count_y]
+#             Piece_cell = Piece_Row[count_y]
+#
+#             if Piece_cell == 1:
+#                 board[x][y] += 1
+#             count_y += 1
+#             y += 1
+#         count_x += 1
+#         count_y = 0
+#         x += 1
+#         y = start_y
+#
+#
+#
+#     pprint(board)
+#
 
 
 def main():
@@ -258,5 +93,4 @@ def update():
 if __name__ == "__main__":
     # main()
     # pygame.QUIT()
-    add_to_bord(0,0)
-    pass
+    #add_to_bord(0,0)
